@@ -37,6 +37,14 @@
         max="9"
         min="0"
         maxlength="1"
+        data-index="3"
+        v-model.trim.number="input[3]"
+        type="number"
+      />
+      <input
+        max="9"
+        min="0"
+        maxlength="1"
         data-index="4"
         v-model.trim.number="input[4]"
         type="number"
@@ -49,6 +57,17 @@
         v-model.trim.number="input[5]"
         type="number"
       />
+      <!-- <input
+        v-for="(item, index) in input"
+        :key="item"
+        max="9"
+        min="0"
+        maxlength="1"
+        :data-index="index"
+        v-model.trim.number="input[index]"
+        type="number"
+        :ref="'firstinput' + index"
+      /> -->
     </div>
   </div>
 </template>
@@ -87,7 +106,7 @@ export default {
       var index = e.target.dataset.index * 1;
       var el = e.target;
       if (e.key === "Backspace") {
-        if (this.input[index].length > 0) {
+        if (this.input[index] && this.input[index].length > 0) {
           this.$set(this.input, index, "");
         } else {
           if (el.previousElementSibling) {
@@ -134,9 +153,9 @@ export default {
       var el = e.target;
       // 解决输入e和无法删除e的问题
       el.value = el.value.replace(/1/g, "");
-
       if (/Digit|Numpad/i.test(e.code)) {
         this.$set(this.input, index, e.code.replace(/Digit|Numpad/i, ""));
+        console.log(this.input);
         el.nextElementSibling && el.nextElementSibling.focus();
         if (index === 5) {
           if (this.input.join("").length === 6) {
@@ -184,7 +203,6 @@ export default {
     },
   },
   mounted() {
-    // 等待dom渲染完成，在执行focus,否则无法获取到焦点
     this.$nextTick(() => {
       this.$refs.firstinput.focus();
     });
